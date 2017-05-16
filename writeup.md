@@ -1,10 +1,6 @@
 # Traffic Sign Recognition
 
 [//]: # (Image References)
-
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
 [image5]: ./examples/placeholder.png "Traffic Sign 2"
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
@@ -13,7 +9,7 @@
 [image10]: ./n_classes.png
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+[rubric points](https://review.udacity.com/#!/rubrics/481/view)
 
 ---
 ### Writeup / README
@@ -24,7 +20,7 @@ Here is a link to my [project code](https://github.com/joe-123/CarND-Traffic-Sig
 
 #### 1. Summary of the data set
 
-I used numpy to calculate summary statistics of the traffic signs data set:
+The data set contains images of german traffic signs. I used numpy to calculate the following summary statistics of the traffic signs data set:
 
 * The size of training set is 34799
 * The size of the validation set is 4410
@@ -32,13 +28,13 @@ I used numpy to calculate summary statistics of the traffic signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-####2. Visualization of the dataset
+#### 2. Visualization of the dataset
 
 The following bar chart shows how many samples of each class the training set contains. As can be seen, the numbers are quite unbalanced.
 
 ![alt text][image10]
 
-The same charts for the validation and test set can be found in the notebook/code.
+The same charts for the validation and test set can be found in the notebook/code. Example images are also beeing plotted in the notebook.
 
 ### Design and Test Model Architecture
 
