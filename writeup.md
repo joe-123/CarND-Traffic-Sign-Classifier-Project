@@ -1,4 +1,4 @@
-#**Traffic Sign Recognition** 
+# Traffic Sign Recognition
 
 [//]: # (Image References)
 
@@ -10,104 +10,105 @@
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image10]: ./n_classes.png "Number of classes in train data"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
+### Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
+Here is a link to my [project code](https://github.com/joe-123/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+### Data Set Summary & Exploration
 
-###Data Set Summary & Exploration
+#### 1. Summary of the data set
 
-####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+I used numpy to calculate summary statistics of the traffic signs data set:
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
+* The size of training set is 34799
+* The size of the validation set is 4410
+* The size of test set is 12630
+* The shape of a traffic sign image is (32, 32, 3)
+* The number of unique classes/labels in the data set is 43
 
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+####2. Visualization of the dataset
 
-####2. Include an exploratory visualization of the dataset.
+The following bar chart shows how many samples of each class the training set contains. As can be seen, the numbers are quite unbalanced.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+![alt text][image10]
 
-![alt text][image1]
+The same charts for the validation and test set can be found in the notebook/code.
 
-###Design and Test a Model Architecture
+### Design and Test Model Architecture
 
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+#### 1. Preprocessing
 
-As a first step, I decided to convert the images to grayscale because ...
+Since the provided LeNet model showed good results from the beginning on I didn't do a lot of preprocessing. Mainly I do a normalization of the single channels for every sample seperately like so:
+X = X / np.linalg.norm(X)
+After that I substract the mean of the channel to obtain a zero mean (roughly):
+X -= np.mean(X)
+This helps to prevent making weights and weight changes to large.
 
-Here is an example of a traffic sign image before and after grayscaling.
+Since I didn't generate additional data, the number of images etc. stay the same:
+Number of training examples = 34799
+Number of validating examples = 4410
+Number of testing examples = 12630
+The dtype changed to float32 though.
 
-![alt text][image2]
-
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
-
-
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+#### 2. Model
+Despite adapting the LeNet model for 3 color channels, I made just one major change which showed good improvements. I replaced the first MaxPooling-Layer with a Dropout(0.6). The idea behind this was, that the pictures are already quite small and a pooling layer removes even more data. To ensure good gerneralization a dropout layer was added instead of the pooling layer. Removing the pooling makes the model computationally more expensive but it is still trainable on the CPU.
+I experimented with removing the other pooling layer, adding more dropouts and using more than 6 filters in the first convolution. However, the model described before showed the best results. 
 
 My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x6 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+| Dropout	      	| keep_prob=0.6 				|
+| Convolution 5x5	    | 1x1 stride, valid padding, output = 24x24x16      									|
+| RELU					|												|
+| Max pooling	2x2      	| 2x2 stride,  outputs 12x12x16 				|
+| Flatten   | output = 2304  |
+| Fully connected		| Input = 2304. Output = 120.        									|
+| RELU					|												|
+| Fully connected		| Input = 120. Output = 84.        									|
+| RELU					|												|
+| Fully connected		| Input = 84. Output = 43.        									|
 
 
-####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+#### 3. Training
+Most parts of the training process weren't touched. I experimented a bit with batch size, number of epochs and learning rate. Using an decaying learning rate showed a significant improvement. I use a function provided by tensorflow for computing an exponential decay. The learning rate is computed as:
 
-To train the model, I used an ....
+decayed_learning_rate = initial_learning_rate * decay_rate ^ (global_step / decay_steps)
 
-####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+The following parameters delived good results:
+batch_size = 128
+epochs = 9
+initial_rate = 0.005
+rate = tf.train.exponential_decay(initial_rate, global_step, decay_steps=34799/batch_size, decay_rate=0.7)
+
+The variable 'global_step' counts the number of batches the network was trained on.
+The parameters result in an aggresive decay of the learning rate. In epoch 9 the learning rate is already reduced from 0.005 to about 0.00005
+
+#### 4. Discussion
+The LeNet model showed good accuracys from the beginning on. Therefore my approach was to improve the existing model. The goal was to make simple but effective changes. The idea behing using dropout instead of pooling in the first layer, was that the resolution of the pictures is just 32x32. Therefore I wanted to preserve as much information as possible. This proved to be very successful.
+The second idea was to improve the learning process by using an decaying learning rate. A decaying learning rate helps to speed up the training process dramatically in the first epochs. In the following epochs the parameters can get finetuned with small learning rates.
+
+The combination of normalization of X_train, dropout and a decaying learning rate shows very good results. I trained the model for 9 epochs, which is more than what's needed. In fact the model reaches an accuracy on the validation set of 0.930 after just 5 epoches!
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
-
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+* training set accuracy of 0.996
+* validation set accuracy of 0.944
+* test set accuracy of 0.917
+(see end of Step 2 in the notebook)
  
 
-###Test a Model on New Images
+### Test a Model on New Images
 
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
 Here are five German traffic signs that I found on the web:
 
@@ -116,7 +117,7 @@ Here are five German traffic signs that I found on the web:
 
 The first image might be difficult to classify because ...
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
@@ -131,7 +132,7 @@ Here are the results of the prediction:
 
 The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 
