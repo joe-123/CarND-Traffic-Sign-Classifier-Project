@@ -83,10 +83,10 @@ Most parts of the training process weren't touched. I experimented a bit with ba
 decayed_learning_rate = initial_learning_rate * decay_rate ^ (global_step / decay_steps)
 
 The following parameters delived good results:
-batch_size = 128
-epochs = 6
-initial_rate = 0.005
-rate = tf.train.exponential_decay(initial_rate, global_step, decay_steps=34799/batch_size, decay_rate=0.7)
+* batch_size = 128
+* epochs = 6
+* initial_rate = 0.005
+* rate = tf.train.exponential_decay(initial_rate, global_step, decay_steps=34799/batch_size, decay_rate=0.7)
 
 The variable 'global_step' counts the number of batches the network was trained on.
 The parameters result in an aggresive decay of the learning rate. In epoch 9 the learning rate is already reduced from 0.005 to about 0.00005
