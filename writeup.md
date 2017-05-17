@@ -39,15 +39,19 @@ The same charts for the validation and test set can be found in the notebook/cod
 
 #### 1. Preprocessing
 Since the provided LeNet model showed good results from the beginning on I didn't do a lot of preprocessing. Mainly I do a normalization of the single channels for every sample seperately like so:
-X = X / np.linalg.norm(X)
+* X = X / np.linalg.norm(X)
+
 After that I substract the mean of the channel to obtain a zero mean (roughly):
-X -= np.mean(X)
+* X -= np.mean(X)
+
 This helps to prevent making weights and weight changes to large.
 
 Since I didn't generate additional data, the number of images etc. stay the same:
-Number of training examples = 34799
-Number of validating examples = 4410
-Number of testing examples = 12630
+
+* Number of training examples = 34799
+* Number of validating examples = 4410
+* Number of testing examples = 12630
+
 The dtype changed to float32 though.
 
 #### 2. Model
@@ -97,6 +101,7 @@ My final model results were:
 * training set accuracy of 0.997
 * validation set accuracy of 0.948
 * test set accuracy of 0.932
+
 (see end of Step 2 in the notebook)
 
 It can be seen, that the accuracy on the training set is much higher than the accuracy on the test and validation set. There seems to be some overfitting. Still, the total accuracy is satisfying.
@@ -116,13 +121,13 @@ Image 4 might be difficult to classify because there are parts of other sings in
 
 Here are the results of the prediction:
 
-| Image			              |     Prediction	        			                  		| 
+| Image			            |     Prediction	          			           		| 
 |:---------------------:|:---------------------------------------------:| 
 | 30 km/h        	            | 30 km/h   								       	| 
-| Bumpy road 		  	            | Bumpy road  								           		|
-| No entry		                  | No entry											 	           |
-| No entry	      	            | No entry					 			        	|
-| Right_of_way at next int.			| Right_of_way at next int.      					  		|
+| Bumpy road 		  	            | Bumpy road  					      		|
+| No entry		                  | No entry							          |
+| No entry	      	            | No entry					 			      	|
+| Right_of_way at next int.			| Right_of_way at next int.  		  |
 
 
 The model was able to correctly guess all of the 5 traffic signs, which gives an accuracy of 100%. This is even higher than the accuracy on the test set (93.2%). Due to the small number of 5 images this number of 100% shouldn't be taken too seriously.
@@ -133,6 +138,7 @@ The code for making predictions on my final model is located in the second cell 
 The model is absolutely save with all of the 5 new images. The worst probability it had, was on sign 5 with about 89.7%. Also, it's remarkable what the next best guesses for the signs are. For example sign 1: The model has a probability of 99.99% that it is a speed limit of 30km/h and the next guesses would be all the other speed limits.
 
 Image 1:
+
 | Probability         	|     Prediction	        			                   		| 
 |:---------------------:|:---------------------------------------------:| 
 | .9999         		     	| 30 km/h    								           	  | 
@@ -142,6 +148,7 @@ Image 1:
 | 2.9e-07				           | 80 km/h      	                 		|
 
 Image 2:
+
 | Probability          	|     Prediction	        			                  		| 
 |:---------------------:|:---------------------------------------------:| 
 | .9999         		     	| Bumpy road   								     	  | 
@@ -151,6 +158,7 @@ Image 2:
 | ~0				                | Traffic signals      					  	|
 
 Image 3:
+
 | Probability          	|     Prediction	        			                  		| 
 |:---------------------:|:---------------------------------------------:| 
 | .9989         		     	| No entry   					         	     	  | 
@@ -160,6 +168,7 @@ Image 3:
 | ~0				                | 70 km/h                  					  		|
 
 Image 4:
+
 | Probability          	|     Prediction	        			                  		| 
 |:---------------------:|:---------------------------------------------:| 
 | .9999         	      	| No entry   						         	  | 
@@ -169,6 +178,7 @@ Image 4:
 | ~0				                | No vehicles     					  		    |
 
 Image 5:
+
 | Probability          	|     Prediction	        			                  		| 
 |:---------------------:|:---------------------------------------------:| 
 | .8967         		     	| Right of way at next int.   								       	  | 
