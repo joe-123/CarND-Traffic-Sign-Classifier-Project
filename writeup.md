@@ -3,11 +3,11 @@
 [//]: # (Image References)
 
 [image10]: ./n_classes.png
-[image4]: ./30.jpg
-[image5]: ./bumpy.jpg
-[image6]: ./not_enter.jpg
-[image7]: ./not_enter_2.jpg
-[image8]: ./row.jpg
+[image4]: ./pics/30.jpg
+[image5]: ./pics/bumpy.jpg
+[image6]: ./pics/not_enter.jpg
+[image7]: ./pics/not_enter_2.jpg
+[image8]: ./pics/row.jpg
 
 ## Rubric Points
 [rubric points](https://review.udacity.com/#!/rubrics/481/view)
@@ -115,7 +115,7 @@ Here are five German traffic signs that I found on the web:
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8]
 
-Image 4 might be difficult to classify because there are parts of other sings in the image. The traffic sign is partly covered by another sign. The rest of the images shouldn't be too hard.
+Image 4 might be difficult to classify because parts of other sings are in the image. The traffic sign is partly covered by another sign. The rest of the images shouldn't be too hard.
 
 #### 2. Results
 
