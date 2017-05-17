@@ -80,7 +80,7 @@ My final CNN model consists of the following layers:
 #### 3. Training
 Most parts of the training process weren't touched. I experimented a bit with batch size, number of epochs and learning rate. Using an decaying learning rate showed a significant improvement. I use a function provided by tensorflow for computing an exponential decay. The learning rate is computed as:
 
-decayed_learning_rate = initial_learning_rate * decay_rate ^ (global_step / decay_steps)
+* decayed_learning_rate = initial_learning_rate * decay_rate ^ (global_step / decay_steps)
 
 The following parameters delived good results:
 * batch_size = 128
